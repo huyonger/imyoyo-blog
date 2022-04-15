@@ -1,6 +1,8 @@
+const { think } = require('thinkjs');
 const {parse} = require('url');
 const BaseRest = require('../rest');
 
+const env = think.env;
 module.exports = class extends BaseRest {
   constructor(...args) {
     super(...args);
@@ -8,16 +10,15 @@ module.exports = class extends BaseRest {
   }
 
   async __before() {
+
     let userInfo = await this.session('userInfo') || {};
     if(think.isEmpty(userInfo)) {
       return this.fail('USER_NOT_LOGIN');
     }
-
     let action = this.ctx.action;
     if(action !== 'get') {
       let referrer = this.ctx.referrer();
       let {site_url} = await this.model('options').getOptions()
-
       if(!referrer || !site_url) {
         return this.fail('REFERRER_ERROR');
       }
@@ -33,7 +34,8 @@ module.exports = class extends BaseRest {
           return this.fail('REFERRER_ERROR');
         }
       } else {
-        if(siteUrlHost.slice(-referrerHost.length) !== referrerHost) {
+        // 开发环境siteUrl不进行判断
+        if(siteUrlHost.slice(-referrerHost.length) !== referrerHost && env !== 'development') {
           return this.fail('REFERRER_ERROR');
         }
       }
