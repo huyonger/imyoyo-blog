@@ -1,8 +1,8 @@
 {
   "apps": [{
-    "name": "firekylin",
+    "name": "imyoyo-blog",
     "script": "production.js",
-    "cwd": "/Users/lizheming/workspace/firekylin/firekylin",
+    "cwd": "/data/imyoyo-blog",
     "exec_mode": "fork",
     "max_memory_restart": "1G",
     "autorestart": true,
